@@ -1,7 +1,6 @@
 call plug#begin(has('nvim') ? stdpath('data') . '/plugged' :'~/.vim/plugged')
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'neovim/nvim-lspconfig'
 Plug 'marko-cerovac/material.nvim'
 Plug 'airblade/vim-gitgutter'
 Plug 'nvim-lua/plenary.nvim'
