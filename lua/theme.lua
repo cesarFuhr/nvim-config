@@ -1,6 +1,3 @@
-
-" Setup Material
-lua << EOF
 require('material').setup({
 
   async_loading = true,
@@ -38,18 +35,11 @@ require('material').setup({
     TelescopeSelection      = { fg = "#82AAFF", bg = "#323232"},
 	  WinSeparator            = { fg = "#616161" },
 	}, -- Overwrite highlights with your own
-
-  lualine_style = 'default',
 })
-EOF
 
-" Set theme
-syntax on
-set cursorline
-let g:material_style = 'darker'
-colorscheme material
+vim.opt.cursorline = true
+vim.opt.termguicolors = true
 
-if (has('termguicolors'))
-  set termguicolors
-endif
-
+vim.g.material_style = 'darker'
+vim.cmd([[ colorscheme material ]])
+vim.cmd([[ syntax on ]])

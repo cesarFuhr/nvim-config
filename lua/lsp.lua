@@ -57,19 +57,23 @@ local lspconfig = require 'lspconfig'
 local telescopeBuiltin = require 'telescope.builtin'
 
 local custom_lsp_attach = function()
-  vim.keymap.set('n', 'K',  vim.lsp.buf.hover, { buffer = 0 })
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = 0 })
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { buffer = 0 })
-  vim.keymap.set('n', 'gi', telescopeBuiltin.lsp_implementations, { buffer = 0 })
-  vim.keymap.set('n', 'gb', telescopeBuiltin.lsp_document_symbols, { buffer = 0 })
-  vim.keymap.set('n', 'gw', telescopeBuiltin.lsp_dynamic_workspace_symbols, { buffer = 0 })
-  vim.keymap.set('n', 'gr', telescopeBuiltin.lsp_references, { buffer = 0 })
-  vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, { buffer = 0 })
-  vim.keymap.set('n', '<leader>dj', vim.diagnostic.goto_next, { buffer = 0 })
-  vim.keymap.set('n', '<leader>dk', vim.diagnostic.goto_prev, { buffer = 0 })
-  vim.keymap.set('n', '<leader>dl', telescopeBuiltin.diagnostics, { buffer = 0 })
-  vim.keymap.set('n', '<leader>af', vim.lsp.buf.code_action, { buffer = 0 })
-  vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { buffer = 0 })
+  local map = vim.keymap.set
+  map('n', 'K',  vim.lsp.buf.hover, { buffer = 0 })
+  map('n', 'gd', vim.lsp.buf.definition, { buffer = 0 })
+  map('n', 'gD', vim.lsp.buf.declaration, { buffer = 0 })
+  map('n', 'gt', vim.lsp.buf.type_definition, { buffer = 0 })
+  map('n', 'gi', telescopeBuiltin.lsp_implementations, { buffer = 0 })
+  map('n', 'gb', telescopeBuiltin.lsp_document_symbols, { buffer = 0 })
+  map('n', 'gw', telescopeBuiltin.lsp_dynamic_workspace_symbols, { buffer = 0 })
+  map('n', 'gr', telescopeBuiltin.lsp_references, { buffer = 0 })
+  map('n', '<leader>f', vim.lsp.buf.formatting, { buffer = 0 })
+  map('n', '<leader>de', vim.diagnostic.open_float, { buffer = 0 })
+  map('n', '<leader>dq', vim.diagnostic.setloclist, { buffer = 0 })
+  map('n', '<leader>dj', vim.diagnostic.goto_next, { buffer = 0 })
+  map('n', '<leader>dk', vim.diagnostic.goto_prev, { buffer = 0 })
+  map('n', '<leader>dl', telescopeBuiltin.diagnostics, { buffer = 0 })
+  map('n', '<leader>af', vim.lsp.buf.code_action, { buffer = 0 })
+  map('n', '<leader>rn', vim.lsp.buf.rename, { buffer = 0 })
 end
 
 -- Go!
@@ -78,28 +82,31 @@ lspconfig.gopls.setup {
   on_attach = custom_lsp_attach,
   settings = {
     gopls = {
+      analyses = {
+          unusedparams = true,
+        },
       staticcheck = true,
     }
   }
 }
 
-function Go_imports(wait_ms)
-  local params = vim.lsp.util.make_range_params()
-  params.context = { only = { "source.organizeImports" } }
-  local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
-  for _, res in pairs(result or {}) do
-    for _, r in pairs(res.result or {}) do
-      if r.edit then
-        vim.lsp.util.apply_workspace_edit(r.edit, 'utf-8')
-      else
-        vim.lsp.buf.execute_command(r.command)
+function OrgImports(wait_ms)
+    local params = vim.lsp.util.make_range_params()
+    params.context = {only = {"source.organizeImports"}}
+    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
+    for _, res in pairs(result or {}) do
+      for _, r in pairs(res.result or {}) do
+        if r.edit then
+          vim.lsp.util.apply_workspace_edit(r.edit, "UTF-8")
+        else
+          vim.lsp.buf.execute_command(r.command)
+        end
       end
     end
-  end
 end
 
 vim.api.nvim_command('autocmd BufWritePre *.go :silent! lua vim.lsp.buf.formatting()')
-vim.api.nvim_command('autocmd BufWritePre *.go :silent! lua Go_imports(1000)')
+vim.api.nvim_command('autocmd BufWritePre *.go :silent! lua OrgImports(1000)')
 
 -- Rust
 lspconfig.rust_analyzer.setup {
@@ -130,16 +137,19 @@ vim.api.nvim_command('autocmd BufWritePre *.rs :silent! lua vim.lsp.buf.formatti
 
 -- Lua
 lspconfig.sumneko_lua.setup {
+  capabilities = capabilities,
   on_attach = custom_lsp_attach,
 }
 -- vim.api.nvim_command('autocmd BufWritePre *.lua :silent! lua vim.lsp.buf.formatting()')
 
 -- Nix
 lspconfig.rnix.setup {
+  capabilities = capabilities,
   on_attach = custom_lsp_attach,
 }
 
 -- JS/TS
 lspconfig.tsserver.setup {
+  capabilities = capabilities,
   on_attach = custom_lsp_attach,
 }
