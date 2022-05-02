@@ -112,6 +112,7 @@ vim.api.nvim_command('autocmd BufWritePre *.go :silent! lua OrgImports(1000)')
 lspconfig.rust_analyzer.setup {
   capabilities = capabilities,
   on_attach = custom_lsp_attach,
+  cmd = { "rustup", "run", "stable", "rust-analyzer" },
   settings = {
     ["rust-analyzer"] = {
       assist = {
