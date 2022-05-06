@@ -1,15 +1,12 @@
+-- Currrently only has Go snippets
+
+
 local ls = require 'luasnip'
-local types = require 'luasnip.util.types'
 
 ls.config.set_config {
   history = true,
   update_events = 'TextChanged,TextChangedI',
   enable_autosnipets = true,
-  --ext_opts = {
-  --  [types.choiceNode] = {
-  --    active = { virt_text = { { "<-", "Error" } } },
-  --  },
-  --},
 }
 
 -- <c-l> is my expansion key
@@ -33,7 +30,7 @@ vim.keymap.set({ "i" }, "<c-o>", function()
   end
 end, { silent = true })
 
--- shorcut to source my luasnips file again, which will reload my snippets
+-- shortcut to source my luasnips file again, which will reload my snippets
 vim.keymap.set("n", "<leader>ss", "<cmd>source ~/.local/share/nvim/plugged/LuaSnip/plugin/luasnip.vim<CR>")
 
 local s, i, t = ls.s, ls.insert_node, ls.text_node
@@ -44,6 +41,7 @@ local rep = require("luasnip.extras").rep
 
 ls.add_snippets("go", {
   -- Fundamentals
+  -- Function
   s({
     dscr="f expands a go func.",
     trig="f",
@@ -51,6 +49,7 @@ ls.add_snippets("go", {
 [[func {}({}) {} {{
   {}
 }}]], { i(1, "name"), i(2), i(3), i(0)})),
+  -- Method
   s({
     dscr="meth expands a method.",
     trig="meth",
@@ -58,6 +57,7 @@ ls.add_snippets("go", {
 [[func ({} {}) {}({}) {} {{
   {}
 }}]], { i(1, "r"), i(2, "Receiver"), i(3, "name"), i(4), i(5), i(0) })),
+  -- Defered function
   s({
     dscr="df expands a defered anonymous func.",
     trig="df",
@@ -65,6 +65,7 @@ ls.add_snippets("go", {
 [[defer func({}) {{
   {}
 }}({})]], { i(1), i(0), i(2) })),
+  -- Go routine with anonymous function
   s({
     dscr="gof expands a go routine with a function.",
     trig="gof",
@@ -72,6 +73,7 @@ ls.add_snippets("go", {
 [[go func({}) {{
   {}
 }}({})]], { i(1), i(0), i(2) })),
+  -- For loop
   s({
     dscr="for expands a for loop.",
     trig="for",
@@ -79,6 +81,7 @@ ls.add_snippets("go", {
 [[for {} := {}; {} {}; {}{} {{
   {}
 }}]], { i(1), i(2), rep(1), i(3), rep(1), i(4), i(0) })),
+  -- For range loop, has some options.
   s({
     dscr="forr expands a for loop\nhas 3 options: slice, map, custom.",
     trig="forr",
@@ -98,6 +101,7 @@ ls.add_snippets("go", {
 [[if {} {{
   {}
 }}]],{ i(1), i(0)})),
+  -- If err != nil
   s({
     dscr=[[iferr expands in a if err != nil statement.
 It has two options: err != nil and inline err declaration.]],
@@ -115,6 +119,7 @@ It has two options: err != nil and inline err declaration.]],
 })),
 
   -- Testing
+  -- Test function
   s({
     dscr="t expands in a test function.",
     trig="t",
@@ -122,6 +127,7 @@ It has two options: err != nil and inline err declaration.]],
 [[func Test{}(t *testing.T) {{
   {}
 }}]], { i(1, "Name"), i(0)})),
+  -- t.Run()
   s({
     dscr="tr expands in a test function.",
     trig="tr",
@@ -131,6 +137,7 @@ It has two options: err != nil and inline err declaration.]],
 }})]], { i(1, "test description"), i(0)})),
 
   -- Type declaration
+  -- Struct declaration
   s({
     dscr="tys expands in a type struct declaration.",
     trig="tys",
@@ -138,6 +145,7 @@ It has two options: err != nil and inline err declaration.]],
 [[type {} struct {{
   {}
 }}]],{ i(1, "Name"), i(0)})),
+  -- interface declaration
   s({
     dscr="tyi expands in a type interface declaration.",
     trig="tyi",

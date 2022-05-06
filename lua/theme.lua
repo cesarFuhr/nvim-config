@@ -1,3 +1,5 @@
+-- Sets up theming settings.
+
 require('material').setup({
 
   async_loading = true,
