@@ -34,7 +34,7 @@ return require'packer'.startup(function (use)
   -- Setting up lualine.
   require('lualine').setup {
     options = {
-      theme = 'base16',
+      theme = 'onedark',
       globalstatus = true,
     },
   }
