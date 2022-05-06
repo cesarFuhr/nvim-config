@@ -29,7 +29,7 @@ opt.gcr = [[n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20,a:blinkwait1000-blinkoff40
 
 -- Custom shell, remove this if you use bash
 -- or change it to whatever shell you use.
-opt.shell = 'fish'
+-- opt.shell = 'fish'
 
 -- GitGutter
 vim.g.gitgutter_preview_win_floating = 0
