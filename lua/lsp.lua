@@ -40,7 +40,7 @@ cmp.setup({
     { name = 'luasnip' },
     { name = 'path' },
   }, {
-      -- completition buffer is only activated after the 5th char.
+    -- completition buffer is only activated after the 5th char.
     { name = 'buffer', keyword_length = 5, max_item_count = 10 },
   }),
   view = {
@@ -80,7 +80,7 @@ local telescopeBuiltin = require 'telescope.builtin'
 local custom_lsp_attach = function()
   local map = vim.keymap.set
   -- Shows help on hover.
-  map('n', 'K',  vim.lsp.buf.hover, { buffer = 0 })
+  map('n', 'K', vim.lsp.buf.hover, { buffer = 0 })
   -- Jumps to definition.
   map('n', 'gd', vim.lsp.buf.definition, { buffer = 0 })
   -- Jumps to declaration.
@@ -114,6 +114,9 @@ local custom_lsp_attach = function()
 end
 
 -- Go!
+-- TODO:
+-- - Run tests as a command
+-- - Build package as command
 lspconfig.gopls.setup {
   -- warns the LSP that it can send snippets suggestions.
   capabilities = capabilities,
@@ -123,33 +126,58 @@ lspconfig.gopls.setup {
   settings = {
     gopls = {
       analyses = {
-          unusedparams = true,
-        },
+        unusedparams = true,
+      },
       staticcheck = true,
     }
   }
 }
+-- Formats the file on save.
+--vim.api.nvim_command('autocmd BufWritePre *.go :silent! lua vim.lsp.buf.formatting()')
 
 -- OrgImports is a function to update imports of a buffer.
 function OrgImports(wait_ms)
-    local params = vim.lsp.util.make_range_params()
-    params.context = {only = {"source.organizeImports"}}
-    local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
-    for _, res in pairs(result or {}) do
-      for _, r in pairs(res.result or {}) do
-        if r.edit then
-          vim.lsp.util.apply_workspace_edit(r.edit, "UTF-8")
-        else
-          vim.lsp.buf.execute_command(r.command)
+  local params = vim.lsp.util.make_range_params()
+  params.context = { only = { "source.organizeImports" } }
+  local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, wait_ms)
+  for _, res in pairs(result or {}) do
+    for _, r in pairs(res.result or {}) do
+      if r.edit then
+        vim.lsp.util.apply_workspace_edit(r.edit, "UTF-8")
+      else
+        vim.lsp.buf.execute_command(r.command)
+      end
+    end
+  end
+end
+
+-- Update imports on save.
+vim.api.nvim_command('autocmd BufWritePre *.go :silent! lua OrgImports(1000)')
+
+function SignatureOnStatusLine(wait_ms)
+  local params = vim.lsp.util.make_position_params()
+  local result = vim.lsp.buf_request_sync(0, "textDocument/hover", params, wait_ms)
+  for _, res in pairs(result or {}) do
+    for _, r in pairs(res or {}) do
+      for _, elem in pairs(r or {}) do
+        if elem.value ~= nil then
+          local lines = elem.value:gmatch("([^\r\n]+)\r?\n?")
+          -- throw away the first line of the iterator.
+          lines()
+          -- print the actual definition.
+          local definition = lines()
+          vim.schedule(function()
+            print(definition)
+          end)
         end
       end
     end
+  end
 end
 
--- Formats the file on save.
-vim.api.nvim_command('autocmd BufWritePre *.go :silent! lua vim.lsp.buf.formatting()')
--- Update imports on save.
-vim.api.nvim_command('autocmd BufWritePre *.go :silent! lua OrgImports(1000)')
+-- Get function signature on cursor hold.
+--vim.api.nvim_command('autocmd CursorHold,CursorHoldI *.go lua SignatureOnStatusLine(300)')
+
 
 -- Rust
 lspconfig.rust_analyzer.setup {
@@ -184,7 +212,7 @@ lspconfig.sumneko_lua.setup {
   capabilities = capabilities,
   on_attach = custom_lsp_attach,
 }
--- vim.api.nvim_command('autocmd BufWritePre *.lua :silent! lua vim.lsp.buf.formatting()')
+vim.api.nvim_command('autocmd BufWritePre *.lua :silent! lua vim.lsp.buf.formatting()')
 
 -- Nix
 lspconfig.rnix.setup {

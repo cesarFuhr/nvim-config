@@ -1,6 +1,6 @@
 _ = vim.cmd [[packadd packer.nvim]]
 
-return require'packer'.startup(function (use)
+return require 'packer'.startup(function(use)
   use 'nvim-lua/plenary.nvim'
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
   use 'nvim-telescope/telescope.nvim'
@@ -27,7 +27,7 @@ return require'packer'.startup(function (use)
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
   use 'hrsh7th/nvim-cmp'
-    -- For luasnip users.
+  -- For luasnip users.
   use 'L3MON4D3/LuaSnip'
   use 'saadparwaiz1/cmp_luasnip'
 
