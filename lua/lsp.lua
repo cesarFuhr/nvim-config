@@ -39,12 +39,13 @@ cmp.setup({
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
     { name = 'path' },
+    { name = "nvim_lsp_signature_help" },
   }, {
     -- completition buffer is only activated after the 5th char.
     { name = 'buffer', keyword_length = 5, max_item_count = 10 },
   }),
   view = {
-    entries = "native"
+    entries = "custom"
   },
   formatting = {
     -- this sets the completition tags that show the source of the suggestion.
@@ -82,11 +83,11 @@ local custom_lsp_attach = function()
   -- Shows help on hover.
   map('n', 'K', vim.lsp.buf.hover, { buffer = 0 })
   -- Jumps to definition.
-  map('n', 'gd', vim.lsp.buf.definition, { buffer = 0 })
+  map('n', 'gd', telescopeBuiltin.lsp_definitions, { buffer = 0 })
   -- Jumps to declaration.
   map('n', 'gD', vim.lsp.buf.declaration, { buffer = 0 })
   -- Jumps to type definition.
-  map('n', 'gt', vim.lsp.buf.type_definition, { buffer = 0 })
+  map('n', 'gt', telescopeBuiltin.lsp_type_definitions, { buffer = 0 })
   -- Lists or jumps to interface implementation.
   map('n', 'gi', telescopeBuiltin.lsp_implementations, { buffer = 0 })
   -- Lists all the buffer symbols.
@@ -133,7 +134,7 @@ lspconfig.gopls.setup {
   }
 }
 -- Formats the file on save.
---vim.api.nvim_command('autocmd BufWritePre *.go :silent! lua vim.lsp.buf.formatting()')
+vim.api.nvim_command('autocmd BufWritePre *.go :silent! lua vim.lsp.buf.formatting()')
 
 -- OrgImports is a function to update imports of a buffer.
 function OrgImports(wait_ms)
@@ -212,7 +213,7 @@ lspconfig.sumneko_lua.setup {
   capabilities = capabilities,
   on_attach = custom_lsp_attach,
 }
-vim.api.nvim_command('autocmd BufWritePre *.lua :silent! lua vim.lsp.buf.formatting()')
+--vim.api.nvim_command('autocmd BufWritePre *.lua :silent! lua vim.lsp.buf.formatting()')
 
 -- Nix
 lspconfig.rnix.setup {
@@ -222,6 +223,12 @@ lspconfig.rnix.setup {
 
 -- JS/TS
 lspconfig.tsserver.setup {
+  capabilities = capabilities,
+  on_attach = custom_lsp_attach,
+}
+
+-- C lang
+lspconfig.clangd.setup {
   capabilities = capabilities,
   on_attach = custom_lsp_attach,
 }

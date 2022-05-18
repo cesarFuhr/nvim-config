@@ -1,6 +1,9 @@
 _ = vim.cmd [[packadd packer.nvim]]
 
 return require 'packer'.startup(function(use)
+  -- Adding packer to avoid it prompting to remove itself.
+  use 'wbthomason/packer.nvim'
+
   use 'nvim-lua/plenary.nvim'
   use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
   use 'nvim-telescope/telescope.nvim'
@@ -20,16 +23,24 @@ return require 'packer'.startup(function(use)
   use 'neovim/nvim-lspconfig'
   use 'onsails/lspkind.nvim'
 
-  -- Completition.
-  use 'hrsh7th/cmp-nvim-lsp'
-  use 'hrsh7th/cmp-nvim-lua'
-  use 'hrsh7th/cmp-buffer'
-  use 'hrsh7th/cmp-path'
-  use 'hrsh7th/cmp-cmdline'
-  use 'hrsh7th/nvim-cmp'
-  -- For luasnip users.
+  -- Snippets.
   use 'L3MON4D3/LuaSnip'
-  use 'saadparwaiz1/cmp_luasnip'
+
+  -- Completition.
+  use {
+    'hrsh7th/cmp-nvim-lsp',
+    requires = {
+      'hrsh7th/cmp-nvim-lua',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline',
+      'hrsh7th/nvim-cmp',
+      "hrsh7th/cmp-nvim-lsp-signature-help",
+      -- for luasnip users.
+      'saadparwaiz1/cmp_luasnip',
+    }
+  }
+
 
   -- Setting up lualine.
   require('lualine').setup {

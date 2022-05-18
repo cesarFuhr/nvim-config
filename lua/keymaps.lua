@@ -21,3 +21,11 @@ map('n', '<leader><leader>', telBuiltin.find_files, opts)
 map('n', '<leader>fb', telBuiltin.buffers, opts)
 -- Workspace live greping in all files.
 map('n', '<leader>fg', telBuiltin.live_grep, opts)
+-- Grep word under the cursor in current dir.
+map('n', '<leader>fw', telBuiltin.grep_string, opts)
+-- Live greping in the current buffer.
+map('n', '<leader>fc', telBuiltin.current_buffer_fuzzy_find, opts)
+-- Spell suggest to the word under the cursor.
+map('n', '<leader>ss', telBuiltin.spell_suggest, opts)
+-- Spell suggest to the word under the cursor.
+map('n', '<leader>ch', telBuiltin.git_commits, opts)

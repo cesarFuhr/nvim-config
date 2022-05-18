@@ -8,6 +8,13 @@ opt.relativenumber = true
 -- Signcolumn
 opt.signcolumn = 'yes'
 
+-- File encoding
+opt.fileencoding = "utf-8"
+
+-- Split preferences
+opt.splitbelow = true
+opt.splitright = true
+
 -- Tabs
 opt.tabstop = 2
 opt.softtabstop = 2
