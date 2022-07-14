@@ -29,3 +29,11 @@ map('n', '<leader>fc', telBuiltin.current_buffer_fuzzy_find, opts)
 map('n', '<leader>ss', telBuiltin.spell_suggest, opts)
 -- Spell suggest to the word under the cursor.
 map('n', '<leader>ch', telBuiltin.git_commits, opts)
+
+-- Quickfix
+-- Go to quickfix window.
+map('n', '<leader>ql', telBuiltin.quickfix, opts)
+-- Go to next quickfix.
+map('n', '<leader>qk', '<cmd>cn<cr>', opts)
+-- Go to prev quickfix.
+map('n', '<leader>qj', '<cmd>cp<cr>', opts)

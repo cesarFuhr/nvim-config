@@ -94,11 +94,6 @@ _G.packer_plugins = {
     path = "/home/cesar/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",
     url = "https://github.com/hrsh7th/cmp-nvim-lsp"
   },
-  ["cmp-nvim-lsp-document-symbol"] = {
-    loaded = true,
-    path = "/home/cesar/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp-document-symbol",
-    url = "https://github.com/hrsh7th/cmp-nvim-lsp-document-symbol"
-  },
   ["cmp-nvim-lsp-signature-help"] = {
     loaded = true,
     path = "/home/cesar/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp-signature-help",
@@ -118,6 +113,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/cesar/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
+  },
+  ["dressing.nvim"] = {
+    loaded = true,
+    path = "/home/cesar/.local/share/nvim/site/pack/packer/start/dressing.nvim",
+    url = "https://github.com/stevearc/dressing.nvim"
   },
   ["lspkind.nvim"] = {
     loaded = true,

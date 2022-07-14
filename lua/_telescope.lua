@@ -1,6 +1,6 @@
 local t = require 'telescope'
 
-t.setup{
+t.setup {
   extensions = {
     fzf = {
       fuzzy = true,

@@ -1,3 +1,18 @@
+-- Setting up a packer bootstrap function.
+local fn = vim.fn
+local install_path = fn.stdpath('data') .. '/site/pack/packer/start/packer.nvim'
+
+local packer_bootstrap
+if fn.empty(fn.glob(install_path)) > 0 then
+  packer_bootstrap = fn.system({
+    'git',
+    'clone',
+    '--depth',
+    '1',
+    'https://github.com/wbthomason/packer.nvim',
+    install_path })
+end
+
 _ = vim.cmd [[packadd packer.nvim]]
 
 return require 'packer'.startup(function(use)
@@ -9,6 +24,8 @@ return require 'packer'.startup(function(use)
   use 'nvim-telescope/telescope.nvim'
   -- faster fuzzy support for telescope.
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+  -- better picker for nvim.
+  use { 'stevearc/dressing.nvim' }
   use 'kyazdani42/nvim-web-devicons'
   use 'numToStr/FTerm.nvim'
   use 'nvim-lualine/lualine.nvim'
@@ -41,6 +58,10 @@ return require 'packer'.startup(function(use)
     }
   }
 
+  -- If bootstrapping, sync all packages before requiring them.
+  if packer_bootstrap then
+    require('packer').sync()
+  end
 
   -- Setting up lualine.
   require('lualine').setup {
@@ -48,10 +69,38 @@ return require 'packer'.startup(function(use)
       theme = 'onedark',
       globalstatus = true,
     },
+    sections = {
+      lualine_a = { 'mode' },
+      lualine_b = { 'branch', 'diff', 'diagnostics' },
+      lualine_c = { { 'filename', path = 1 } },
+      lualine_x = { 'encoding', 'fileformat', 'filetype' },
+      lualine_y = { 'progress' },
+      lualine_z = { 'location' }
+    },
   }
 
   -- Setting up treesitter.
+  require('nvim-treesitter.install').compilers = { "gcc" }
   require('nvim-treesitter.configs').setup {
+    ensure_installed = {
+      "make",
+      "markdown",
+      "bash",
+      "c",
+      "lua",
+      "rust",
+      "nix",
+      "go",
+      "gomod",
+      "graphql",
+      "json",
+      "yaml",
+      "html",
+      "proto",
+      "javascript",
+      "typescript",
+      "tsx",
+    },
     highlight = {
       enable = true,
     },
@@ -59,10 +108,4 @@ return require 'packer'.startup(function(use)
       enable = true,
     },
   }
-
-  -- Setting up floating and persistent terminal.
-  require('FTerm').setup({
-    -- put whatever shell you use here.
-    cmd = 'zsh'
-  })
 end)

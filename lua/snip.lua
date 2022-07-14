@@ -108,12 +108,13 @@ It has two options: err != nil and inline err declaration.]],
     trig="iferr",
   }, fmt(
 [[if {} {{
-  {}
+  return {}
 }}]], {
   c(1,
   {
     t "err != nil",
-    sn(1, { i(1), t ", ", i(2, "err"), t " := ", i(3, "funcCall()"), t "; ", rep(2), t " != nil" })
+    sn(nil, { i(1, "err"), t " := ", i(2, "funcCall()"), t "; ", rep(1), t " != nil" }),
+    sn(nil, { i(1), t ", ", i(2, "err"), t " := ", i(3, "funcCall()"), t "; ", rep(2), t " != nil" }),
   }),
   i(0),
 })),

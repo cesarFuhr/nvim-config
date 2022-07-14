@@ -109,7 +109,7 @@ local custom_lsp_attach = function()
   -- Lists all diagnostics on telescope.
   map('n', '<leader>dl', telescopeBuiltin.diagnostics, { buffer = 0 })
   -- Lists code actions on telescope.
-  map('n', '<leader>af', vim.lsp.buf.code_action, { buffer = 0 })
+  map('n', '<leader>ca', vim.lsp.buf.code_action, { buffer = 0 })
   -- Renames the symbol under the cursor. Does not saves all buffers that were changes.
   map('n', '<leader>rn', vim.lsp.buf.rename, { buffer = 0 })
 end
@@ -134,7 +134,7 @@ lspconfig.gopls.setup {
   }
 }
 -- Formats the file on save.
-vim.api.nvim_command('autocmd BufWritePre *.go :silent! lua vim.lsp.buf.formatting()')
+vim.api.nvim_command('autocmd BufWritePre *.go :silent! lua vim.lsp.buf.formatting_sync()')
 
 -- OrgImports is a function to update imports of a buffer.
 function OrgImports(wait_ms)
@@ -206,20 +206,21 @@ lspconfig.rust_analyzer.setup {
     }
   }
 }
-vim.api.nvim_command('autocmd BufWritePre *.rs :silent! lua vim.lsp.buf.formatting()')
+vim.api.nvim_command('autocmd BufWritePre *.rs :silent! lua vim.lsp.buf.formatting_sync()')
 
 -- Lua
 lspconfig.sumneko_lua.setup {
   capabilities = capabilities,
   on_attach = custom_lsp_attach,
 }
---vim.api.nvim_command('autocmd BufWritePre *.lua :silent! lua vim.lsp.buf.formatting()')
+vim.api.nvim_command('autocmd BufWritePre *.lua :silent! lua vim.lsp.buf.formatting_sync()')
 
 -- Nix
 lspconfig.rnix.setup {
   capabilities = capabilities,
   on_attach = custom_lsp_attach,
 }
+vim.api.nvim_command('autocmd BufWritePre *.nix :silent! lua vim.lsp.buf.formatting_sync()')
 
 -- JS/TS
 lspconfig.tsserver.setup {
@@ -232,3 +233,16 @@ lspconfig.clangd.setup {
   capabilities = capabilities,
   on_attach = custom_lsp_attach,
 }
+
+-- Latex
+lspconfig.texlab.setup {
+  capabilities = capabilities,
+  on_attach = custom_lsp_attach,
+}
+
+-- JSON
+lspconfig.jsonls.setup {
+  capabilities = capabilities,
+  on_attach = custom_lsp_attach,
+}
+vim.api.nvim_command('autocmd BufWritePre *.json :silent! lua vim.lsp.buf.formatting_sync()')
